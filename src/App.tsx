@@ -1,24 +1,16 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./styles/reset.css";
+import "./styles/global.css";
+import NameList from "./components/NameList";
+const namesMock = [
+  { firstName: "leonardo", age: 25 },
+  { firstName: "gabi", age: 23 },
+];
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>teste</h1>
+      <NameList names={namesMock} />
     </div>
   );
 }
