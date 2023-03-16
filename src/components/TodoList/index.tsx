@@ -1,25 +1,54 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
+import {v4 as uuidv4} from 'uuid'
+
+type taskData = {
+  id: string
+  name: string,
+  isChecked: boolean
+}
 
 const TodoList = () => {
-  const [task, setTask] = useState([
-    { name: "fazer alguma coisa", isChecked: false },
-  ]);
+
+  const [task, setTask] = useState<taskData[]>([])
   const [titleTask, setTitleTask] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const createTask = () => {
-    const createdTask = { name: titleTask, isChecked: false };
+
+    if(!titleTask && inputRef.current) {
+      inputRef.current.focus()
+      return
+    }
+
+    const createdTask = { id: uuidv4(),  name: titleTask, isChecked: false };
     const newTask = [...task];
     newTask.push(createdTask);
     setTask(newTask);
   };
 
-  const checkTask = (item: any) => {
+  const checkTask = (id: string) => {
     const updateTask = [...task];
-    const index = updateTask.findIndex((task) => item.name === task.name);
+    const index = updateTask.findIndex((task) => id === task.id);
     updateTask[index].isChecked = !updateTask[index].isChecked;
 
     setTask(updateTask);
-  };
+    
+  }
+  
+  useEffect(() => {
+   const tasksStorage = localStorage.getItem('tasks')
+
+   if(!localStorage || !tasksStorage ) return
+
+   setTask(JSON.parse(tasksStorage))
+
+  }, []) 
+
+  useEffect(() => {
+
+    localStorage.setItem('tasks', JSON.stringify(task))
+
+  }, [task])
 
   return (
     <>
@@ -31,6 +60,8 @@ const TodoList = () => {
         placeholder="title"
         onChange={(e) => setTitleTask(e.target.value)}
         style={{ color: "black" }}
+        ref={inputRef}
+        
       />
       <button style={{ backgroundColor: "gray" }} onClick={createTask}>
         create
@@ -38,13 +69,13 @@ const TodoList = () => {
 
       <ul>
         {task.map((item) => (
-          <li key={`${item.name}`}>
+          <li key={`${item.name}${Math.random()}`}>
             <span>{item.name}</span>
             <input
               type="checkbox"
               checked={item.isChecked}
               onChange={() => {
-                checkTask(item);
+                checkTask(item.id);
               }}
             />
           </li>
