@@ -1,26 +1,25 @@
 import { memo, useEffect, useRef, useState } from "react";
-import {v4 as uuidv4} from 'uuid'
+import { v4 as uuidv4 } from "uuid";
 
 type taskData = {
-  id: string
-  name: string,
-  isChecked: boolean
-}
+  id: string;
+  name: string;
+  isChecked: boolean;
+};
 
 const TodoList = () => {
-
-  const [task, setTask] = useState<taskData[]>([])
+  const [task, setTask] = useState<taskData[]>([]);
   const [titleTask, setTitleTask] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const createTask = () => {
+    if (!titleTask && inputRef.current) {
+      inputRef.current.focus();
 
-    if(!titleTask && inputRef.current) {
-      inputRef.current.focus()
-      return
+      return;
     }
 
-    const createdTask = { id: uuidv4(),  name: titleTask, isChecked: false };
+    const createdTask = { id: uuidv4(), name: titleTask, isChecked: false };
     const newTask = [...task];
     newTask.push(createdTask);
     setTask(newTask);
@@ -32,23 +31,19 @@ const TodoList = () => {
     updateTask[index].isChecked = !updateTask[index].isChecked;
 
     setTask(updateTask);
-    
-  }
-  
-  useEffect(() => {
-   const tasksStorage = localStorage.getItem('tasks')
-
-   if(!localStorage || !tasksStorage ) return
-
-   setTask(JSON.parse(tasksStorage))
-
-  }, []) 
+  };
 
   useEffect(() => {
+    const tasksStorage = localStorage.getItem("tasks");
 
-    localStorage.setItem('tasks', JSON.stringify(task))
+    if (!localStorage || !tasksStorage) return;
 
-  }, [task])
+    setTask(JSON.parse(tasksStorage));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(task));
+  }, [task]);
 
   return (
     <>
@@ -61,7 +56,6 @@ const TodoList = () => {
         onChange={(e) => setTitleTask(e.target.value)}
         style={{ color: "black" }}
         ref={inputRef}
-        
       />
       <button style={{ backgroundColor: "gray" }} onClick={createTask}>
         create

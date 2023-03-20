@@ -2,6 +2,7 @@ import "./styles/reset.css";
 import "./styles/global.css";
 import NameList from "./components/NameList";
 import TodoList from "./components/TodoList";
+import Posts from "./components/Posts";
 const namesMock = [
   { firstName: "leonardo", age: 25 },
   { firstName: "gabi", age: 23 },
@@ -22,6 +23,7 @@ function App() {
       >
         <NameList names={namesMock} />
         <TodoList />
+        <Posts />
       </div>
     </div>
   );
