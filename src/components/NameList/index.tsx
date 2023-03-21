@@ -1,4 +1,3 @@
-import React, { memo } from "react";
 import { useEffect, useState } from "react";
 
 type name = {
@@ -10,14 +9,19 @@ interface INameList {
   names: name[];
 }
 
-const NameList = ({ names }: INameList) => {
+const namesMock: name[] = [
+  { firstName: "leonardo", age: 25 },
+  { firstName: "gabi", age: 23 },
+];
+
+const NameList = () => {
   const [userData, setUserData] = useState<name[]>([]);
 
   useEffect(() => {
     if (userData.length === 0) {
-      setUserData(names);
+      setUserData(namesMock);
     }
-  }, [names, userData]);
+  }, [namesMock, userData]);
 
   const handleClick = () => {
     const newUser = [...userData];
@@ -41,4 +45,4 @@ const NameList = ({ names }: INameList) => {
   );
 };
 
-export default memo(NameList);
+export default NameList;
